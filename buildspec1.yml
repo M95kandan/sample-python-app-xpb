@@ -1,0 +1,29 @@
+version: 0.2
+
+#env:
+#  parameter-store:
+   # DOCKER_REGISTRY_USERNAME: /sample-python-app/docker-credentials/username
+   # DOCKER_REGISTRY_PASSWORD: /sample-python-app/docker-credentials/password
+    #DOCKER_REGISTRY_URL: /sample-python-app/docker-registry/url
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+
+  pre_build:
+    commands:
+      - echo "Installing dependencies..."
+      - pip install -r requirements.txt
+
+  build:
+    commands:
+      - echo "Building Docker image..."
+      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 084298470880.dkr.ecr.ap-south-1.amazonaws.com
+      - docker build -t sample-python-registry .
+      - docker tag sample-python-registry:latest 084298470880.dkr.ecr.ap-south-1.amazonaws.com/sample-python-registry:latest
+      - docker push 084298470880.dkr.ecr.ap-south-1.amazonaws.com/sample-python-registry:latest
+
+  post_build:
+    commands:
+      - echo "Build completed successfully!"
