@@ -6,4 +6,4 @@ set -e
 docker pull m95kandan/sample-python-app
 
 # Run the Docker image as a container
-docker run -d -p 5000:5000 m95kandan/sample-python-app
+docker run -d -p 2000:2000 m95kandan/sample-python-app
